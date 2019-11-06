@@ -1,7 +1,7 @@
 /* tslint:disable no-console */
 
 import * as express from 'express';
-import { Connection } from 'typeorm';
+import { Connection, FindConditions } from 'typeorm';
 
 import { Customer } from '../entity/Customer';
 
@@ -35,7 +35,8 @@ export const create: express.RequestHandler = async (req, res) => {
 
 export const list: express.RequestHandler = async (req, res) => {
   try {
-    const customers = await getRepository(req).find();
+    const query: FindConditions<Customer> | undefined = req.query;
+    const customers = await getRepository(req).find(query);
 
     return res.status(200).send(customers);
   } catch (error) {
